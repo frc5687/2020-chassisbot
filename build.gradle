@@ -1,0 +1,87 @@
+plugins {
+    id "java"
+    id "idea"
+    id "edu.wpi.first.GradleRIO" version "2020.1.2"
+}
+
+def ROBOT_MAIN_CLASS = "org.frc5687.deepspace.chassisbot.Main"
+
+// Define my targets (RoboRIO) and artifacts (deployable files)
+// This is added by GradleRIO's backing project EmbeddedTools.
+deploy {
+    targets {
+        roboRIO("roborio") {
+            // Team number is loaded either from the .wpilib/wpilib_preferences.json
+            // or from command line. If not found an exception will be thrown.
+            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+            // want to store a team number in this file.
+            team = frc.getTeamNumber()
+        }
+    }
+    artifacts {
+        frcJavaArtifact('frcJava') {
+            targets << "roborio"
+            // Debug can be overridden by command line, for use with VSCode
+            debug = frc.getDebugOrDefault(false)
+        }
+        // Built in artifact to deploy arbitrary files to the roboRIO.
+        fileTreeArtifact('frcStaticFileDeploy') {
+            // The directory below is the local directory to deploy
+            files = fileTree(dir: 'src/main/deploy')
+            // Deploy to RoboRIO target, into /home/lvuser/deploy
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
+        }
+    }
+}
+
+// Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+// Also defines JUnit 4.
+dependencies {
+    compile wpi.deps.wpilib()
+    compile wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+    testCompile 'junit:junit:4.12'
+}
+
+// Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
+// in order to make them all available at runtime. Also adding the manifest so WPILib
+// knows where to look for our Robot Class.
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+}
+
+wrapper {
+    gradleVersion = '5.0'
+}
+
+task gitInfo(dependsOn: build) {
+    description = 'Logs git branch and version to build'
+    def cmd = 'git rev-parse --abbrev-ref HEAD'
+    project.ext.branch = cmd.execute().text.trim()
+    cmd = 'git rev-parse --short HEAD'
+    project.ext.revision = cmd.execute().text.trim()
+
+    println '[branch] ' + project.branch
+    println '[commit] ' + project.revision
+}
+
+task gitLog {
+    description = 'Logs git branch and version to log file when deploy'
+    def logFile = new File('src/main/java/org/frc5687/deepspace/chassisbot/utils/Version.java')
+
+    def cmd = 'git diff HEAD --shortstat'
+    def mod = cmd.execute().text.trim()
+    def modified = (mod != null && mod.length() != 0) ? ' *' : ''
+    def br = '\n\n'
+    def reader = 'package org.frc5687.deepspace.chassisbot.utils;' + br
+    reader += '/**\n * A version class to read current Git information from deployed robot code\n * @author wilstenholme\n */' + br
+    reader += 'public class Version {\n'
+    reader += '    public static final String BRANCH = \"' + project.branch + '\";\n'
+    reader += '    public static final String REVISION = \"' + project.revision + '\";\n'
+    reader += '    public static final String MODIFIED = \"' +  modified + '\";\n'
+    reader += '}'
+    logFile.text = reader
+}
