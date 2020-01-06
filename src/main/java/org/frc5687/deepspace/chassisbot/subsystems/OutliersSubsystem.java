@@ -1,12 +1,12 @@
 package org.frc5687.deepspace.chassisbot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.frc5687.deepspace.chassisbot.utils.ILoggingSource;
 import org.frc5687.deepspace.chassisbot.utils.MetricTracker;
 import org.frc5687.deepspace.chassisbot.utils.RioLogger;
 
-public abstract class OutliersSubsystem extends Subsystem implements ILoggingSource {
+public abstract class OutliersSubsystem extends SubsystemBase implements ILoggingSource {
     private MetricTracker _metricTracker;
 
     @Override

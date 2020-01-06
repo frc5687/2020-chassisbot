@@ -211,11 +211,11 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://C:/Users/Ben Bernard/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibOldCommands/wpilibOldCommands-java/2020.1.2/5e7dcb0e2ca765dbb18c538a6ced54ed7ad89ba3/wpilibOldCommands-java-2020.1.2.jar!/"/>
+          <root url="jar://C:/Users/Ben Bernard/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibNewCommands/wpilibNewCommands-java/2020.1.2/878b9d75cf793a5f3793f3d88bbf6bec4641b241/wpilibNewCommands-java-2020.1.2.jar!/"/>
         </CLASSES>
         <JAVADOC/>
         <SOURCES>
-          <root url="jar://C:/Users/Ben Bernard/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibOldCommands/wpilibOldCommands-java/2020.1.2/89b8cf8dfa1abcb41a1d956eb537b76cdf415c42/wpilibOldCommands-java-2020.1.2-sources.jar!/"/>
+          <root url="jar://C:/Users/Ben Bernard/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibNewCommands/wpilibNewCommands-java/2020.1.2/cb68d02306b43fb592d4746a195a029b9b9dae07/wpilibNewCommands-java-2020.1.2-sources.jar!/"/>
         </SOURCES>
       </library>
     </orderEntry>

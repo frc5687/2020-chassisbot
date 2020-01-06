@@ -16,7 +16,7 @@ import static org.frc5687.deepspace.chassisbot.Constants.DriveTrain.CREEP_FACTOR
 import static org.frc5687.deepspace.chassisbot.utils.Helpers.applySensitivityFactor;
 import static org.frc5687.deepspace.chassisbot.utils.Helpers.limit;
 
-public class SparkMaxDriveTrain extends OutliersSubsystem implements PIDSource {
+public class DriveTrain extends OutliersSubsystem implements PIDSource {
     private CANSparkMax _frontLeftSpark;
     private CANSparkMax _frontRightSpark;
     private CANSparkMax _backLeftSpark;
@@ -37,8 +37,8 @@ public class SparkMaxDriveTrain extends OutliersSubsystem implements PIDSource {
     private Shifter _shifter;
     private Robot _robot;
 
-    public SparkMaxDriveTrain (Robot robot) {
-        info("Constructing SparkMaxDriveTrain class.");
+    public DriveTrain(Robot robot) {
+        info("Constructing DriveTrain class.");
         _oi = robot.getOI();
         _imu = robot.getIMU();
         _shifter = robot.getShifter();
@@ -116,7 +116,7 @@ public class SparkMaxDriveTrain extends OutliersSubsystem implements PIDSource {
     }
 
     @Override
-    protected void initDefaultCommand() {
+    public void periodic() {
         setDefaultCommand(new Drive(this, _imu, _oi,  _limelight, _robot.getPoseTracker()));
     }
 

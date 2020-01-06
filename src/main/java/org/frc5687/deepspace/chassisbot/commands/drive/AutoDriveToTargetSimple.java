@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.OI;
 import org.frc5687.deepspace.chassisbot.commands.OutliersCommand;
-import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
+import org.frc5687.deepspace.chassisbot.subsystems.DriveTrain;
 import org.frc5687.deepspace.chassisbot.utils.BasicPose;
 import org.frc5687.deepspace.chassisbot.utils.Helpers;
 import org.frc5687.deepspace.chassisbot.utils.Limelight;
@@ -17,7 +17,7 @@ import static org.frc5687.deepspace.chassisbot.Constants.Auto.Align.STEER_K;
 public class AutoDriveToTargetSimple extends OutliersCommand {
 
     private OI _oi;
-    private SparkMaxDriveTrain _driveTrain;
+    private DriveTrain _driveTrain;
     private AHRS _imu;
     private Limelight _limelight;
     private PoseTracker _poseTracker;
@@ -42,11 +42,11 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
     private double _slowSpeed;
     private double _mediumSpeed;
 
-    public AutoDriveToTargetSimple(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker, double speed, boolean finishFromDistance, double distance, boolean ignoreElevatorHeight) {
+    public AutoDriveToTargetSimple(DriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker, double speed, boolean finishFromDistance, double distance, boolean ignoreElevatorHeight) {
         this(driveTrain,imu,oi,limelight,poseTracker, speed, finishFromDistance,distance, ignoreElevatorHeight, 0);
     }
 
-    public AutoDriveToTargetSimple(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker, double speed, boolean finishFromDistance, double distance, boolean ignoreElevatorHeight, int pipeline) {
+    public AutoDriveToTargetSimple(DriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker, double speed, boolean finishFromDistance, double distance, boolean ignoreElevatorHeight, int pipeline) {
         _driveTrain = driveTrain;
         _oi = oi;
         _imu = imu;
@@ -56,7 +56,7 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
         _finishFromDistance = finishFromDistance;
         _distance = distance;
         _ignoreElevatorHeight = ignoreElevatorHeight;
-        requires(_driveTrain);
+        addRequirements(_driveTrain);
 
         // logMetrics("StickSpeed", "StickRotation", "LeftPower", "RightPower", "LeftMasterAmps", "LeftFollowerAmps", "RightMasterAmps", "RightFollowerAmps", "TurnSpeed");
     }
@@ -64,7 +64,7 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
 
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         // create the _angleController here, just like in AutoDriveToTarget
         error("Starting AutoSimple");
         _targetSighted = false;
@@ -84,7 +84,7 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         // Get the base speed from the throttle
         _targetSighted = _limelight.isTargetSighted();
         switch (_driveState) {
@@ -178,7 +178,7 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
     }
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         if (_finishFromDistance) {
             return _limelight.getTargetDistance() <= _distance;
         }

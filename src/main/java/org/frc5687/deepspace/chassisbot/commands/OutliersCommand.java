@@ -1,19 +1,19 @@
 package org.frc5687.deepspace.chassisbot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.frc5687.deepspace.chassisbot.utils.ILoggingSource;
 import org.frc5687.deepspace.chassisbot.utils.MetricTracker;
 import org.frc5687.deepspace.chassisbot.utils.RioLogger;
 
-public abstract class OutliersCommand extends Command implements ILoggingSource {
+public abstract class OutliersCommand extends CommandBase implements ILoggingSource {
     private MetricTracker _metricTracker;
 
     public OutliersCommand() {
     }
 
     public OutliersCommand(double timeout) {
-        super.setTimeout(timeout);
+        super.withTimeout(timeout);
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class OutliersCommand extends Command implements ILoggingSource 
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         super.initialize();
         if (_metricTracker!=null) {
             _metricTracker.resume();
@@ -71,19 +71,12 @@ public abstract class OutliersCommand extends Command implements ILoggingSource 
     }
 
     @Override
-    protected void end() {
-        super.end();
+    public void end(boolean interrupted) {
+        super.end(interrupted);
         if (_metricTracker!=null) {
             _metricTracker.pause();
         }
     }
 
-    @Override
-    protected void interrupted() {
-        super.interrupted();
-        if (_metricTracker!=null) {
-            _metricTracker.pause();
-        }
-    }
 }
 

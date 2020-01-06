@@ -1,9 +1,7 @@
 package org.frc5687.deepspace.chassisbot;
 
 public class Constants {
-    /**
-     *
-     */
+
     public static final int CYCLES_PER_SECOND = 50;
     public static final int TICKS_PER_UPDATE = 10;
     public static final double METRIC_FLUSH_PERIOD = 1.0;
@@ -45,25 +43,6 @@ public class Constants {
         public static final double MEDIUM_ZONE = 70;
         public static final double SLOW_SPEED = 0.4;
         public static final double MEDIUM_SPEED = 0.6;
-    }
-
-    public class Turret {
-        public static final double DEADBAND = 0.1;
-        public static final boolean TURRET_MOTOR_INVERTED = true;
-        public static final double MAX_SPEED = 0.8;
-        public static final double MAX_FORWARD_SPEED = MAX_SPEED;
-        public static final double MAX_REVERSE_SPEED = -MAX_SPEED;
-        public static final double DEGREES_PER_TICK = 0.0;
-        public static final double MAX_TURRET_ANGLE = 360; // in degrees
-        public static final double MID_TURRET_ANGLE = 180; // in degrees
-        public static final double MIN_TURRET_ANGLE = 0; // in degrees
-
-        public static final double ROTATION_K = 0.03;
-
-        public static final long LOCK_TIME = 80;
-        public static final double TOLERANCE = 1;
-
-        public static final double TICKS_PER_DEGREES = 0.2014611111111111111111111111111;
     }
 
     public class Shifter {

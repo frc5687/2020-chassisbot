@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import jaci.pathfinder.PathfinderFRC;
 import jaci.pathfinder.Trajectory;
 import org.frc5687.deepspace.chassisbot.commands.KillAll;
@@ -41,8 +41,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
     private AHRS _imu;
     private Limelight _limelight;
-    //private VictorSPDriveTrain _driveTrainVictor;
-    private SparkMaxDriveTrain _driveTrainSpark;
+    private DriveTrain _driveTrain;
     private Shifter _shifter;
 
     private PDP _pdp;
@@ -91,7 +90,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         // Then subsystems....
         //_driveTrainVictor = new VictorSPDriveTrain(this);
         _shifter = new Shifter(this);
-        _driveTrainSpark = new SparkMaxDriveTrain(this);
+        _driveTrain = new DriveTrain(this);
 
         _poseTracker = new PoseTracker(this);
 
@@ -161,7 +160,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     @Override
     public void autonomousInit() {
         _fmsConnected =  DriverStation.getInstance().isFMSAttached();
-        _driveTrainSpark.enableBrakeMode();
+        _driveTrain.enableBrakeMode();
         _limelight.disableLEDs();
         _limelight.setStreamingMode(Limelight.StreamMode.PIP_SECONDARY);
         _autoCommand = null;
@@ -177,7 +176,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
                 break;
         }
         if (_autoCommand!=null) {
-            _autoCommand.start();
+            _autoCommand.schedule();
         }
     }
 
@@ -208,10 +207,10 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         MetricTracker.newMetricRowAll();
 
         if (_oi.isKillAllPressed()) {
-            new KillAll(this).start();
+            new KillAll(this).initialize();
         }
 
-        Scheduler.getInstance().run();
+        CommandScheduler.getInstance().run();
     }
 
     /**
@@ -219,7 +218,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
      */
     @Override
     public void testPeriodic() {
-        Scheduler.getInstance().run();
+        CommandScheduler.getInstance().run();
     }
 
     @Override
@@ -239,7 +238,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
             _oi.updateDashboard();
             //_driveTrainVictor.updateDashboard();
             _shifter.updateDashboard();
-            _driveTrainSpark.updateDashboard();
+            _driveTrain.updateDashboard();
             _pdp.updateDashboard();
             _limelight.updateDashboard();
         }
@@ -326,8 +325,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         return _oi;
     }
     public AHRS getIMU() { return _imu; }
-    //public VictorSPDriveTrain getVictorSPDriveTrain() { return _driveTrainVictor; }
-    public SparkMaxDriveTrain getSparkMaxDriveTrain() { return _driveTrainSpark; }
+    public DriveTrain getDriveTrain() { return _driveTrain; }
     public Shifter getShifter() { return _shifter; }
 
     public PDP getPDP() { return _pdp; }
@@ -336,7 +334,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
     @Override
     public Pose getPose() {
-        return new BasicPose(_imu.getYaw(), _driveTrainSpark.getLeftDistance(), _driveTrainSpark.getRightDistance(), _driveTrainSpark.getDistance());
+        return new BasicPose(_imu.getYaw(), _driveTrain.getLeftDistance(), _driveTrain.getRightDistance(), _driveTrain.getDistance());
     }
 
     public enum IdentityMode {

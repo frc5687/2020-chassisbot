@@ -2,11 +2,11 @@ package org.frc5687.deepspace.chassisbot.commands;
 
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.subsystems.Shifter;
-import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
+import org.frc5687.deepspace.chassisbot.subsystems.DriveTrain;
 
 public class Shift extends OutliersCommand {
     private Shifter _shifter;
-    private SparkMaxDriveTrain _driveTrain;
+    private DriveTrain _driveTrain;
     private Shifter.Gear gear;
 
     private double initialLeftSpeed, initialRightSpeed;
@@ -14,25 +14,24 @@ public class Shift extends OutliersCommand {
     private State state = State.STOP_MOTOR;
     private boolean auto;
 
-    public Shift(SparkMaxDriveTrain driveTrain, Shifter shifter, Shifter.Gear gear, boolean auto) {
+    public Shift(DriveTrain driveTrain, Shifter shifter, Shifter.Gear gear, boolean auto) {
         _driveTrain = driveTrain;
         _shifter = shifter;
 
-        requires(_driveTrain);
-        requires(_shifter);
+        addRequirements(_driveTrain, _shifter);
 
         this.gear = gear;
         this.auto = auto;
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         info("Shifting to " + gear);
         state =   State.STOP_MOTOR;
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         switch (state) {
             case STOP_MOTOR:
                 _driveTrain.pauseMotors();
@@ -58,12 +57,8 @@ public class Shift extends OutliersCommand {
     }
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         return state == State.DONE;
-    }
-
-    @Override
-    protected void interrupted() {
     }
 
     public enum State {

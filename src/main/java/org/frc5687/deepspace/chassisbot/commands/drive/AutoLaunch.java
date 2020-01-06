@@ -1,11 +1,11 @@
 package org.frc5687.deepspace.chassisbot.commands.drive;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.frc5687.deepspace.chassisbot.Robot;
-import org.frc5687.deepspace.chassisbot.commands.drive.AutoDrive;
 
-public class AutoLaunch extends CommandGroup {
-    public AutoLaunch(Robot robot) {
-        addSequential(new AutoDrive(robot.getSparkMaxDriveTrain(),robot.getIMU(),24,.5,false, true, 0, "", 2000));
-    }
+public class AutoLaunch extends SequentialCommandGroup {
+//    public AutoLaunch(Robot robot) {
+//        addCommands(
+//                new AutoDrive(robot.getDriveTrain(),robot.getIMU(),24,.5,false, true, 0, "", 2000));
+//    }
 }

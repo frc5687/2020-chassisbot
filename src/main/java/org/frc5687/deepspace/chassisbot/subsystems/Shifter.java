@@ -20,7 +20,7 @@ public class Shifter extends OutliersSubsystem {
     }
 
     @Override
-    protected void initDefaultCommand() {
+    public void periodic() {
     }
 
     public void shift(Gear gear, boolean auto) {

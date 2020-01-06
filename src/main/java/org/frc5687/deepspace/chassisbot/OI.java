@@ -2,8 +2,7 @@ package org.frc5687.deepspace.chassisbot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.*;
 import org.frc5687.deepspace.chassisbot.commands.*;
 import org.frc5687.deepspace.chassisbot.subsystems.Shifter;
 import org.frc5687.deepspace.chassisbot.utils.AxisButton;
@@ -50,8 +49,8 @@ public class OI extends OutliersProxy {
 
 
     public void initializeButtons(Robot robot){
-        _driverRightBumper.whenPressed(new Shift(robot.getSparkMaxDriveTrain(), robot.getShifter(), Shifter.Gear.LOW, false));
-        _driverLeftBumper.whenPressed(new Shift(robot.getSparkMaxDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));
+        _driverRightBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.LOW, false));
+        _driverLeftBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));
 
     }
 
@@ -68,11 +67,6 @@ public class OI extends OutliersProxy {
     public double getDriveRotation() {
         double speed = getSpeedFromAxis(_driverGamepad, Gamepad.Axes.RIGHT_X.getNumber());
         speed = applyDeadband(speed, Constants.DriveTrain.DEADBAND);
-        return speed;
-    }
-    public double getTurretRotation() {
-        double speed = getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_X.getNumber());
-        speed = applyDeadband(speed, Constants.Turret.DEADBAND);
         return speed;
     }
 
