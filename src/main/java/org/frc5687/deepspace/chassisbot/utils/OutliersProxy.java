@@ -1,6 +1,6 @@
 package org.frc5687.deepspace.chassisbot.utils;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5687.deepspace.chassisbot.utils.ILoggingSource;
 import org.frc5687.deepspace.chassisbot.utils.RioLogger;

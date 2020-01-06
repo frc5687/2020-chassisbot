@@ -2,8 +2,8 @@ package org.frc5687.deepspace.chassisbot.utils;
 
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
  * Created by Ben Bernard on 3/2/2017.

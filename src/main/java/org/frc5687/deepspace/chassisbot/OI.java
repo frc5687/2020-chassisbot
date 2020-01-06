@@ -2,8 +2,7 @@ package org.frc5687.deepspace.chassisbot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.*;
 import org.frc5687.deepspace.chassisbot.commands.*;
 import org.frc5687.deepspace.chassisbot.subsystems.Shifter;
 import org.frc5687.deepspace.chassisbot.utils.AxisButton;
