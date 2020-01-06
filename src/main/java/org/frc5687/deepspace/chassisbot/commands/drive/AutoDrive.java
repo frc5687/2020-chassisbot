@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.commands.OutliersCommand;
-import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
+import org.frc5687.deepspace.chassisbot.subsystems.DriveTrain;
 
 public class AutoDrive extends OutliersCommand {
     private double _distance;
@@ -20,7 +20,7 @@ public class AutoDrive extends OutliersCommand {
     private double _angle;
     private String _stage;
 
-    private SparkMaxDriveTrain _driveTrain;
+    private DriveTrain _driveTrain;
     private AHRS _imu;
 
     private double kPdistance = 0.1; // .05;
@@ -42,9 +42,9 @@ public class AutoDrive extends OutliersCommand {
      * @param stopOnFinish Whether to stop the motors when we are done
      * @param angle The angle to drive, in degrees.  Pass 1000 to maintain robot's hading.
      */
-    public AutoDrive(SparkMaxDriveTrain driveTrain, AHRS imu, double distance, double speed, boolean usePID, boolean stopOnFinish, double angle, String stage, double timeout) {
+    public AutoDrive(DriveTrain driveTrain, AHRS imu, double distance, double speed, boolean usePID, boolean stopOnFinish, double angle, String stage, double timeout) {
         super(timeout);
-        requires(driveTrain);
+        addRequirements(driveTrain);
         _speed = speed;
         _distance = distance;
         _usePID = usePID;
@@ -56,7 +56,7 @@ public class AutoDrive extends OutliersCommand {
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         error("Starting AutoDrive");
         _driveTrain.resetDriveEncoders();
 
@@ -90,7 +90,7 @@ public class AutoDrive extends OutliersCommand {
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         super.execute();
         double baseSpeed = _usePID ? _distancePIDOut : (_distance < 0 ? -_speed : _speed);
         metric("LeftSpeed", baseSpeed + _anglePIDOut);
@@ -104,7 +104,7 @@ public class AutoDrive extends OutliersCommand {
     }
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         if (_usePID) {
             if (_distanceController.onTarget()) {
                 error("AutoDrive stopped at " + _driveTrain.getDistance());
@@ -134,13 +134,13 @@ public class AutoDrive extends OutliersCommand {
 
 
     @Override
-    protected void end() {
-        super.end();
-        if (isTimedOut()) {
-            error("AutoDrive timed out (" + _driveTrain.getDistance() + ", " + (_driveTrain.getYaw() - _angleController.getSetpoint()) + ") " + (_stage ==null?"": _stage));
-        } else {
-            error("AutoDrive Finished (" + _driveTrain.getDistance() + ", " + (_driveTrain.getYaw() - _angleController.getSetpoint()) + ") " + (_stage == null ? "" : _stage));
-        }
+    public void end(boolean interrupt) {
+        super.end(interrupt);
+//        if (isTimedOut()) {
+//            error("AutoDrive timed out (" + _driveTrain.getDistance() + ", " + (_driveTrain.getYaw() - _angleController.getSetpoint()) + ") " + (_stage ==null?"": _stage));
+//        } else {
+//            error("AutoDrive Finished (" + _driveTrain.getDistance() + ", " + (_driveTrain.getYaw() - _angleController.getSetpoint()) + ") " + (_stage == null ? "" : _stage));
+//        }
         if (_distanceController !=null) {
             _distanceController.disable();
         }

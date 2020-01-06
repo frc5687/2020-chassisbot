@@ -7,13 +7,13 @@ public class KillAll extends OutliersCommand {
     private Robot _robot;
 
     public KillAll(Robot robot) {
-        requires(robot.getSparkMaxDriveTrain());
+        addRequirements(robot.getDriveTrain());
         _robot = robot;
     }
 
     @Override
-    protected void initialize() {
-        _robot.getSparkMaxDriveTrain().enableBrakeMode();
+    public void initialize() {
+        _robot.getDriveTrain().enableBrakeMode();
 
         _robot.getLimelight().disableLEDs();
         _finished = true;
@@ -21,12 +21,12 @@ public class KillAll extends OutliersCommand {
     }
 
     @Override
-    protected void end() {
+    public void end(boolean interrupted)  {
         error("Ending KillAll Command");
     }
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         return _finished;
     }
 }

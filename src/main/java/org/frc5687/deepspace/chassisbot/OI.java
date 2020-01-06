@@ -50,8 +50,8 @@ public class OI extends OutliersProxy {
 
 
     public void initializeButtons(Robot robot){
-        _driverRightBumper.whenPressed(new Shift(robot.getSparkMaxDriveTrain(), robot.getShifter(), Shifter.Gear.LOW, false));
-        _driverLeftBumper.whenPressed(new Shift(robot.getSparkMaxDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));
+        _driverRightBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.LOW, false));
+        _driverLeftBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));
 
     }
 
@@ -68,11 +68,6 @@ public class OI extends OutliersProxy {
     public double getDriveRotation() {
         double speed = getSpeedFromAxis(_driverGamepad, Gamepad.Axes.RIGHT_X.getNumber());
         speed = applyDeadband(speed, Constants.DriveTrain.DEADBAND);
-        return speed;
-    }
-    public double getTurretRotation() {
-        double speed = getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_X.getNumber());
-        speed = applyDeadband(speed, Constants.Turret.DEADBAND);
         return speed;
     }
 

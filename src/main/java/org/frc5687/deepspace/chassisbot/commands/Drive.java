@@ -5,8 +5,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.OI;
-import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
-import org.frc5687.deepspace.chassisbot.subsystems.VictorSPDriveTrain;
+import org.frc5687.deepspace.chassisbot.subsystems.DriveTrain;
 import org.frc5687.deepspace.chassisbot.utils.BasicPose;
 import org.frc5687.deepspace.chassisbot.utils.Helpers;
 import org.frc5687.deepspace.chassisbot.utils.Limelight;
@@ -17,8 +16,7 @@ import static org.frc5687.deepspace.chassisbot.Constants.Auto.Align.STEER_K;
 public class Drive extends OutliersCommand {
 
     private OI _oi;
-    private VictorSPDriveTrain _driveTrainVictor;
-    private SparkMaxDriveTrain _driveTrainSpark;
+    private DriveTrain _driveTrain;
     private AHRS _imu;
     private Limelight _limelight;
     private PoseTracker _poseTracker;
@@ -44,17 +42,17 @@ public class Drive extends OutliersCommand {
 
     private int garbageCount = 0;
 
-    public Drive(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker) {
-        _driveTrainSpark = driveTrain;
+    public Drive(DriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker) {
+        _driveTrain = driveTrain;
         _imu = imu;
         _oi = oi;
         _limelight = limelight;
         _poseTracker = poseTracker;
-        requires(_driveTrainSpark);
+        addRequirements(_driveTrain);
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         super.initialize();
 
         _driveState = DriveState.normal;
@@ -74,7 +72,7 @@ public class Drive extends OutliersCommand {
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         super.execute();
         // Get the base speed from the throttle
         double stickSpeed = _oi.getDriveSpeed();
@@ -140,22 +138,22 @@ public class Drive extends OutliersCommand {
         metric("State", _driveState.name());
         stickSpeed = limitSpeed(stickSpeed);
         if(!_oi.isOverridePressed()) {
-            _driveTrainSpark.cheesyDrive(Math.min(stickSpeed, 0), 0, false, false);
+            _driveTrain.cheesyDrive(Math.min(stickSpeed, 0), 0, false, false);
         } else if (_driveState == DriveState.normal) {
             if (wheelRotation==0 && _angleController.isEnabled()) {
                 metric("PID/AngleOut", _anglePIDOut);
                 metric("PID/Yaw", _imu.getYaw());
-                _driveTrainSpark.cheesyDrive(stickSpeed, stickSpeed==0 ?  0 :_anglePIDOut, false, true);
+                _driveTrain.cheesyDrive(stickSpeed, stickSpeed==0 ?  0 :_anglePIDOut, false, true);
             } else {
-                _driveTrainSpark.cheesyDrive(stickSpeed, wheelRotation, _oi.isCreepPressed(), false);
+                _driveTrain.cheesyDrive(stickSpeed, wheelRotation, _oi.isCreepPressed(), false);
             }
         } else {
-            _driveTrainSpark.cheesyDrive(stickSpeed, _turnSpeed, false, true);
+            _driveTrain.cheesyDrive(stickSpeed, _turnSpeed, false, true);
         }
         metric("StickSpeed", stickSpeed);
         metric("StickRotation", wheelRotation);
-        metric("LeftPower", _driveTrainSpark.getLeftPower());
-        metric("RightPower", _driveTrainSpark.getRightPower());
+        metric("LeftPower", _driveTrain.getLeftPower());
+        metric("RightPower", _driveTrain.getRightPower());
         metric("TurnSpeed", _turnSpeed);
     }
 
@@ -220,7 +218,7 @@ public class Drive extends OutliersCommand {
 
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         return false;
     }
     private class AngleListener implements PIDOutput {

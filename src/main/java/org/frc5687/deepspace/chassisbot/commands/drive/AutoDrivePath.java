@@ -8,7 +8,7 @@ import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.DistanceFollower;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.commands.OutliersCommand;
-import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
+import org.frc5687.deepspace.chassisbot.subsystems.DriveTrain;
 import org.frc5687.deepspace.chassisbot.utils.BasicPose;
 import org.frc5687.deepspace.chassisbot.utils.Limelight;
 import org.frc5687.deepspace.chassisbot.utils.PoseTracker;
@@ -20,7 +20,7 @@ public class AutoDrivePath extends OutliersCommand {
     private DistanceFollower _rightFollower;
     private Notifier _pathNotifier;
 
-    private SparkMaxDriveTrain _driveTrain;
+    private DriveTrain _driveTrain;
     private AHRS _imu;
     private Limelight _limelight;
     private PoseTracker _poseTracker;
@@ -39,8 +39,8 @@ public class AutoDrivePath extends OutliersCommand {
     private boolean _backwards;
     private int _direction;
 
-    public AutoDrivePath(SparkMaxDriveTrain driveTrain, AHRS imu, Limelight limelight, PoseTracker poseTracker, Trajectory leftTrajectory, Trajectory rightTrajectory, int trackingSegments, boolean backwards) {
-        requires(driveTrain);
+    public AutoDrivePath(DriveTrain driveTrain, AHRS imu, Limelight limelight, PoseTracker poseTracker, Trajectory leftTrajectory, Trajectory rightTrajectory, int trackingSegments, boolean backwards) {
+        addRequirements(driveTrain);
         _driveTrain = driveTrain;
         _imu = imu;
         _limelight = limelight;
@@ -59,7 +59,7 @@ public class AutoDrivePath extends OutliersCommand {
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         SmartDashboard.putBoolean("MetricTracker/AutoDrivePath", true);
         super.initialize();
         _driveTrain.resetDriveEncoders();
@@ -80,7 +80,7 @@ public class AutoDrivePath extends OutliersCommand {
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
     }
     public void run() {
         _index++;
@@ -149,7 +149,7 @@ public class AutoDrivePath extends OutliersCommand {
     }
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         if (_leftFollower.isFinished() || _rightFollower.isFinished()) {
             info("AutoDrivePath finished");
             return true;
@@ -158,8 +158,8 @@ public class AutoDrivePath extends OutliersCommand {
     }
 
     @Override
-    protected void end() {
-        super.end();
+    public void end(boolean interrupt) {
+        super.end(interrupt);
         _leftFollower.reset();
         _rightFollower.reset();
         if (_pathNotifier != null) { _pathNotifier.stop(); }
