@@ -42,6 +42,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     private AHRS _imu;
     private Limelight _limelight;
     private DriveTrain _driveTrain;
+    private Shooter _shooter;
     private Shifter _shifter;
 
     private PDP _pdp;
@@ -91,6 +92,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         //_driveTrainVictor = new VictorSPDriveTrain(this);
         _shifter = new Shifter(this);
         _driveTrain = new DriveTrain(this);
+        _shooter = new Shooter(this);
 
         _poseTracker = new PoseTracker(this);
 
@@ -236,6 +238,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
             _autoChooser.updateDashboard();
             _updateTick = 0;
             _oi.updateDashboard();
+            _shooter.updateDashboard();
             //_driveTrainVictor.updateDashboard();
             _shifter.updateDashboard();
             _driveTrain.updateDashboard();
@@ -327,6 +330,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     public AHRS getIMU() { return _imu; }
     public DriveTrain getDriveTrain() { return _driveTrain; }
     public Shifter getShifter() { return _shifter; }
+    public Shooter getShooter() { return _shooter; }
 
     public PDP getPDP() { return _pdp; }
     public Limelight getLimelight() { return _limelight; }

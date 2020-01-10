@@ -56,6 +56,14 @@ public class Constants {
         public static final long MANUAL_WAIT_PERIOD = 3000;
     }
 
+    public class Shooter {
+        public static final boolean LEFT_INVERTED = false; //TODO find out
+        public static final boolean RIGHT_INVERTED = false; //TODO find out
+        public static final int COUNTS_PER_REV = 8192;
+        public static final double DEADBAND = 0.05;
+    }
+
+
 
     public static class OI {
         public static final double AXIS_BUTTON_THRESHHOLD = 0.2;

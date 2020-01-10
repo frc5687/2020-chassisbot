@@ -14,6 +14,8 @@ public class RobotMap {
             public static final int RIGHT_FRONT_NEO = 4;
             public static final int LEFT_BACK_NEO = 3;
             public static final int RIGHT_BACK_NEO = 1;
+            public static final int LEFT_SHOOTER_NEO = 5;
+            public static final int RIGHT_SHOOTER_NEO = 6;
         }
 
 

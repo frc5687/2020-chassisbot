@@ -7,13 +7,14 @@ public class KillAll extends OutliersCommand {
     private Robot _robot;
 
     public KillAll(Robot robot) {
-        addRequirements(robot.getDriveTrain());
+        addRequirements(robot.getDriveTrain(), robot.getShooter());
         _robot = robot;
     }
 
     @Override
     public void initialize() {
         _robot.getDriveTrain().enableBrakeMode();
+        _robot.getShooter().setSpeed(0);
 
         _robot.getLimelight().disableLEDs();
         _finished = true;

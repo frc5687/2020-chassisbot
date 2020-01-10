@@ -23,6 +23,8 @@ public class OI extends OutliersProxy {
     private Button _driverRightBumper;
     private Button _driverLeftBumper;
 
+    private Button _operatorAButton;
+
     private AxisButton _driverRightYAxisUpButton;
 
     private AxisButton _operatorRightXAxisUpButton;
@@ -44,6 +46,8 @@ public class OI extends OutliersProxy {
         _operatorRightXAxisDownButton = new AxisButton(_operatorGamepad,Gamepad.Axes.RIGHT_Y.getNumber(), -.5);
         _operatorRightXAxisUpButton = new AxisButton(_operatorGamepad, Gamepad.Axes.RIGHT_Y.getNumber(), .5);
 
+        _operatorAButton = new JoystickButton(_operatorGamepad,Gamepad.Buttons.A.getNumber());
+
 
     }
 
@@ -51,7 +55,7 @@ public class OI extends OutliersProxy {
     public void initializeButtons(Robot robot){
         _driverRightBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.LOW, false));
         _driverLeftBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));
-
+        _operatorAButton.whenPressed(new ShootSpeedSetpoint(robot.getShooter(), this, 60.0));
     }
 
     public boolean isAutoTargetPressed() {
@@ -67,6 +71,11 @@ public class OI extends OutliersProxy {
     public double getDriveRotation() {
         double speed = getSpeedFromAxis(_driverGamepad, Gamepad.Axes.RIGHT_X.getNumber());
         speed = applyDeadband(speed, Constants.DriveTrain.DEADBAND);
+        return speed;
+    }
+    public double getShooterSpeed() {
+        double speed = getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.LEFT_Y.getNumber());
+        speed = applyDeadband(speed, Constants.Shooter.DEADBAND);
         return speed;
     }
 
