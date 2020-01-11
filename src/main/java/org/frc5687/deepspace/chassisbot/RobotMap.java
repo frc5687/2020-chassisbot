@@ -16,6 +16,7 @@ public class RobotMap {
             public static final int RIGHT_BACK_NEO = 1;
             public static final int TURRET_NEO = 5;
             public static final int TILT_NEO = 6;
+            public static final int INTAKE_NEO = 7;
         }
 
 
