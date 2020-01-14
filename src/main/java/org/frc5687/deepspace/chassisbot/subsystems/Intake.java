@@ -39,18 +39,22 @@ public class Intake extends OutliersSubsystem {
     @Override
     public void updateDashboard()
     {
-        //metric("INTAKE STATUS", getIntakeStatus());
-        metric("INTAKE POSITION", getIntakePosition());
         metric("INTAKE POWER", getIntakePower());
+        metric("INTAKE POSITION", getPosition()== Intake.Position.HIGH ? "Intake from Human Player" : (getPosition() == Intake.Position.LOW ? "Intake from Ground" : "Unknown"));
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+        setDefaultCommand(null);
     }
 
     public void raiseIntake() { _intakeSolenoid.set(DoubleSolenoid.Value.kReverse); }
 
     public void lowerIntake() { _intakeSolenoid.set(DoubleSolenoid.Value.kForward); }
 
-    public void updateDashboard() {
+    /*public void updateDashboard() {
         metric("Intake Position", getPosition()== Intake.Position.HIGH ? "Intake from Human Player" : (getPosition() == Intake.Position.LOW ? "Intake from Ground" : "Unknown"));
-    }
+    }*/
 
     public enum Position {
         UNKNOWN(DoubleSolenoid.Value.kOff),
